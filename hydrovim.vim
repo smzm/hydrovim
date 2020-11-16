@@ -1,13 +1,18 @@
-:function Digging()
-  
+:function HydrovimClean()
   :execute "normal! ms"
-  
+
   "Delete all hydrovim comment
   :execute "g/^# /d" 
-  
+
   "go back to the last position
-   :execute "normal! `s"
-  
+  :execute "normal! `s"
+
+:endfunction
+
+
+:function HydrovimRun()
+  :call HydrovimClean()
+
   "get the current line
   :let current_line = line(".") 
 
@@ -32,4 +37,7 @@
 
  :endfunction
 
- map <F4> :call Digging()<cr>
+nnoremap <F3> :call HydrovimClean()<cr>
+nnoremap <F4> :call HydrovimRun()<cr>
+inoremap <F4> \<esc>:call HdyrovimRun()<cr>
+
