@@ -1,12 +1,11 @@
 :function HydrovimClean()
-  :execute "normal! ms"
+  :silent! execute "normal! ms"
 
   "Delete all hydrovim comment
-  :execute "g/^# /d" 
+  :silent! execute "g/^# /d" 
 
   "go back to the last position
-  :execute "normal! `s"
-
+  :silent! execute "normal! `s"
 :endfunction
 
 
@@ -39,5 +38,5 @@
 
 nnoremap <F3> :call HydrovimClean()<cr>
 nnoremap <F4> :call HydrovimRun()<cr>
-inoremap <F4> \<esc>:call HdyrovimRun()<cr>
+inoremap <F4> <esc>:call HydrovimRun()<cr>
 
