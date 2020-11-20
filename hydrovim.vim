@@ -16,27 +16,28 @@
   :let current_line = line(".") 
 
   "put breakout() line before the command ran
-  :execute "normal!"..current_line.."ggObreakpoint()\<esc>" 
+  :execute "normal!"..current_line.."ggOprint('HydrovimStep')\<esc>"
   
   "create temp_hydrovim.py and put all the text were before line ran
-  :execute "1,"..(current_line+1).."w! ~/.hydrovim/.temp_hydrovim.py" 
+  :silent execute "1,"..(current_line+1).."w! ~/.hydrovim/.temp_hydrovim.py" 
   
   "delete breakout from main code 
   :execute "normal! dd"
 
   "run code in temp_hydrovim and put the results in results_hydrovim file
-  :let results = system('python ~/.hydrovim/.temp_hydrovim.py > ~/.hydrovim/.results_hydrovim 2>&1','continue') 
+  :let results = system('python3 ~/.hydrovim/.temp_hydrovim.py > ~/.hydrovim/.results_hydrovim 2>&1') 
 
   ":read !awk '$1 == '(Pdb)' {i=1;$1='  '} i{printf '# \t%s\n', $0}' ~/hydrovim/results_hydrovim
   "run awk command to pick the answer
-  :read !awk -f ~/.hydrovim/.awk_script ~/.hydrovim/.results_hydrovim
+  ":read !awk -f ~/.hydrovim/.awk_script ~/.hydrovim/.results_hydrovim
 
-  ""delete Pdb text from beginning of results
-  :execute "normal \<esc>". current_line. "ggjf(6x" 
+  :silent !sed -n '/HydrovimStep/,$p' ~/.hydrovim/.results_hydrovim > ~/.hydrovim/.results_hydrovim2
+  :silent !sed  '/HydrovimStep/d' ~/.hydrovim/.results_hydrovim2 > ~/.hydrovim/.results_hydrovim3
+  :read !awk '{print "\#    "$0}' ~/.hydrovim/.results_hydrovim3
 
- :endfunction
+:endfunction
 
-nnoremap <F3> :call HydrovimClean()<cr>
-nnoremap <F4> :call HydrovimRun()<cr>
-inoremap <F4> <esc>:call HydrovimRun()<cr>
+nnoremap <F8> :call HydrovimClean()<cr>
+nnoremap <F7> :call HydrovimRun()<cr>
+inoremap <F7> <esc>:call HydrovimRun()<cr>
 
