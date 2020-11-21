@@ -37,7 +37,6 @@
 
 :endfunction
 
-nnoremap <F8> :call HydrovimClean()<cr>
-nnoremap <F7> :call HydrovimRun()<cr>
-inoremap <F7> <esc>:call HydrovimRun()<cr>
-
+nnoremap <F7> :call HydrovimClean()<cr>
+nnoremap <F8> :call HydrovimRun()<cr>
+inoremap <F8> <esc>:call HydrovimRun()<cr>
