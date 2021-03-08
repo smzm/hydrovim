@@ -10,7 +10,7 @@ git clone https://github.com/smzm/hydrovim.git
 
 source the address to the init.vim file or vimrc
 
-for nvim in init.vim
+for ex. in nvim inside init.vim file:
 ``` 
 source $HOME/.config/nvim/hydrovim/hydrovim.vim
 ```
