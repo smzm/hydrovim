@@ -1,5 +1,5 @@
 # Hydrovim
-a plugin that run python code and put the result inside your code in vim (neovim)
+a plugin can run Python and Javascript code and put the result inside your code in vim (neovim)
 
 ## Manually installation:
 Clone repo in vim or nvim configuration directory.ex: 
@@ -16,3 +16,6 @@ source $HOME/.config/nvim/hydrovim/hydrovim.vim
 ```
 
 * use F8 for run your code and F7 for cleaning the result
+
+#### Be Sure installed python and node before.
+hydrovim use ```python``` and ```node``` alias for run codes.
