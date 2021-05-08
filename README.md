@@ -1,6 +1,8 @@
 # Hydrovim
 A plugin can run Python and Javascript code and put the result inside your code as comments.
 
+<br>
+
 ## Manually installation:
 - #### Clone repo in vim or nvim configuration directory.
  
