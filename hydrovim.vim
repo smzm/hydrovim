@@ -2,7 +2,6 @@ let g:FileType = &filetype
 
 :function HydrovimClean()
       :silent! execute "normal! ms"
-      
       "Delete all hydrovim comment
       :if g:FileType == "python"
           :silent! execute "g/^# /d" 
@@ -11,7 +10,6 @@ let g:FileType = &filetype
       :endif
       "go back to the last position
       :silent! execute "normal! `s"
-      
       " Clean command prompt after calling hydrovimClean function
       echo ""
 :endfunction
@@ -69,6 +67,11 @@ let g:FileType = &filetype
   :endfunction
 
 
+" Disable continuation of comments to the next line
+:set formatoptions-=cro
+
 nnoremap <silent> <F7> :call HydrovimClean() <cr><cr>
 nnoremap <silent> <F8> :call HydrovimRun()<cr><cr>
 inoremap <silent> <F8> <esc>:call HydrovimRun()<cr><cr>
+map <silent> <CR> ji
+
