@@ -17,11 +17,22 @@ let g:FileType = &filetype
 
 
 :function HydrovimPython()
+    
+    " this variable is a flag . if will be 1 hydrovim execute
+    let l:HydrovimRunned = 0
 
-    :silent execute g:current_line.."w! ~/.config/nvim/hydrovim/.current_line.py"
-    :let IsVariable = system("awk -e '/[a-zA-Z 0-9]=[a-zA-Z 0-9]/ {print $1}' ~/.config/nvim/hydrovim/.current_line.py")
+    " put the current line inside '.current_line_text.py'
+    :silent execute g:current_line.."w! ~/.config/nvim/hydrovim/.current_line_text.py"
 
+    " check the current line is a Variable, a print statement, or an unknown statemnet
+    :let l:IsVariable = system("awk -e '/[a-zA-Z 0-9]=[a-zA-Z 0-9]/ {print $1}' ~/.config/nvim/hydrovim/.current_line_text.py")
+    :let l:IsPrint = system("awk -e '$1 ~ /^print/ {print $1}' ~/.config/nvim/hydrovim/.current_line_text.py")
+
+    " if awk can find '=' in statement it is a variable 
     :if (l:IsVariable != "")
+
+        :let l:HydrovimRunned = 1
+
         :execute "normal! 0vt yoprint()\<esc>hp"
         
         "put 'Hydrovim running code to this line' after print(variable)
@@ -32,23 +43,48 @@ let g:FileType = &filetype
         :execute "normal! dd"
         :execute "normal! dd"
         :execute "normal! k"
-    :else
+
+    " if awk can find 'print' in the first characters of statement it is a print statement
+    :elseif(l:IsPrint != "")
+        let l:HydrovimRunned = 1
         "put 'Hydrovim running code to this line' before the command ran
         :execute "normal!"..g:current_line.."ggOprint('Hydrovim running code to this line.')\<esc>"
         "create temp_hydrovim.py and put all the text were before line ran
         :silent execute "1,"..(g:current_line+1).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
         "delete breakout from main code 
         :execute "normal! dd"
+
+
+    " if awk can't  find any   '=' or 'print' in the statement put inside a print(<statement>)
+    :else
+       
+       " check the current line it's not a function, class ,... or anything finished with --> ':'
+       :let l:Is_func = system("awk -e '$NF ~ /:$/ {print $0}' ~/.config/nvim/hydrovim/.current_line_text.py")
+       :if (l:Is_func == "")
+         :execute "normal! VyI#\<esc>pIprint(\<esc>A)" 
+         :let l:HydrovimRunned = 1
+
+         "put 'Hydrovim running code to this line' before the command ran
+         :execute "normal!"..g:current_line.."ggOprint('Hydrovim running code to this line.')\<esc>"
+
+         :silent execute "1,"..(g:current_line+4).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
+
+         "delete breakout from main code 
+         :execute "normal! jjddkkddx"
+       :endif
     :endif
 
-    "run code in temp_hydrovim.py and put the results in results_hydrovim file
-    :let results = system('python ~/.config/nvim/hydrovim/.temp_hydrovim.py > ~/.config/nvim/hydrovim/.results_hydrovim_py 2>&1') 
-    ":read !awk '$1 == '(Pdb)' {i=1;$1='  '} i{printf '# \t%s\n', $0}' ~/hydrovim/results_hydrovim
-    "run awk command to pick the answer
-    ":read !awk -f ~/.hydrovim/.awk_script ~/.hydrovim/.results_hydrovim
-    :silent !sed -n '/Hydrovim running code to this line./,$p' ~/.config/nvim/hydrovim/.results_hydrovim_py > ~/.config/nvim/hydrovim/.results_hydrovim2_py
-    :silent !sed  '/Hydrovim running code to this line./d' ~/.config/nvim/hydrovim/.results_hydrovim2_py > ~/.config/nvim/hydrovim/.results_hydrovim3_py
-    :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.results_hydrovim3_py
+    :if (l:HydrovimRunned == 1)
+
+      "run code in temp_hydrovim.py and put the results in results_hydrovim file
+      :let results = system('python ~/.config/nvim/hydrovim/.temp_hydrovim.py > ~/.config/nvim/hydrovim/.results_hydrovim_py 2>&1') 
+      ":read !awk '$1 == '(Pdb)' {i=1;$1='  '} i{printf '# \t%s\n', $0}' ~/hydrovim/results_hydrovim
+      "run awk command to pick the answer
+      ":read !awk -f ~/.hydrovim/.awk_script ~/.hydrovim/.results_hydrovim
+      :silent !sed -n '/Hydrovim running code to this line./,$p' ~/.config/nvim/hydrovim/.results_hydrovim_py > ~/.config/nvim/hydrovim/.results_hydrovim2_py
+      :silent !sed  '/Hydrovim running code to this line./d' ~/.config/nvim/hydrovim/.results_hydrovim2_py > ~/.config/nvim/hydrovim/.results_hydrovim3_py
+      :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.results_hydrovim3_py
+    :endif
 :endfunction
 
 
