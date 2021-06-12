@@ -15,21 +15,40 @@ let g:FileType = &filetype
 :endfunction
 
 
+
 :function HydrovimPython()
-  "put HydrovimStep line before the command ran
-  :execute "normal!"..g:current_line.."ggOprint('Hydrovim running code to this line.')\<esc>"
-  "create temp_hydrovim.py and put all the text were before line ran
-  :silent execute "1,"..(g:current_line+1).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
-  "delete breakout from main code 
-  :execute "normal! dd"
-  "run code in temp_hydrovim.py and put the results in results_hydrovim file
-  :let results = system('python ~/.config/nvim/hydrovim/.temp_hydrovim.py > ~/.config/nvim/hydrovim/.results_hydrovim_py 2>&1') 
-  ":read !awk '$1 == '(Pdb)' {i=1;$1='  '} i{printf '# \t%s\n', $0}' ~/hydrovim/results_hydrovim
-  "run awk command to pick the answer
-  ":read !awk -f ~/.hydrovim/.awk_script ~/.hydrovim/.results_hydrovim
-  :silent !sed -n '/Hydrovim running code to this line./,$p' ~/.config/nvim/hydrovim/.results_hydrovim_py > ~/.config/nvim/hydrovim/.results_hydrovim2_py
-  :silent !sed  '/Hydrovim running code to this line./d' ~/.config/nvim/hydrovim/.results_hydrovim2_py > ~/.config/nvim/hydrovim/.results_hydrovim3_py
-  :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.results_hydrovim3_py
+
+    :silent execute g:current_line.."w! ~/.config/nvim/hydrovim/.current_line.py"
+    :let IsVariable = system("awk -e '/[a-zA-Z 0-9]=[a-zA-Z 0-9]/ {print $1}' ~/.config/nvim/hydrovim/.current_line.py")
+
+    :if (l:IsVariable != "")
+        :execute "normal! 0vt yoprint()\<esc>hp"
+        
+        "put 'Hydrovim running code to this line' after print(variable)
+        :execute "normal!"..g:current_line.."ggoprint('Hydrovim running code to this line.')\<esc>"
+        "create temp_hydrovim.py and put all the text were before line ran
+         :silent execute "1,"..(g:current_line+2).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
+        "delete breakout from main code 
+        :execute "normal! dd"
+        :execute "normal! dd"
+        :execute "normal! k"
+    :else
+        "put 'Hydrovim running code to this line' before the command ran
+        :execute "normal!"..g:current_line.."ggOprint('Hydrovim running code to this line.')\<esc>"
+        "create temp_hydrovim.py and put all the text were before line ran
+        :silent execute "1,"..(g:current_line+1).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
+        "delete breakout from main code 
+        :execute "normal! dd"
+    :endif
+
+    "run code in temp_hydrovim.py and put the results in results_hydrovim file
+    :let results = system('python ~/.config/nvim/hydrovim/.temp_hydrovim.py > ~/.config/nvim/hydrovim/.results_hydrovim_py 2>&1') 
+    ":read !awk '$1 == '(Pdb)' {i=1;$1='  '} i{printf '# \t%s\n', $0}' ~/hydrovim/results_hydrovim
+    "run awk command to pick the answer
+    ":read !awk -f ~/.hydrovim/.awk_script ~/.hydrovim/.results_hydrovim
+    :silent !sed -n '/Hydrovim running code to this line./,$p' ~/.config/nvim/hydrovim/.results_hydrovim_py > ~/.config/nvim/hydrovim/.results_hydrovim2_py
+    :silent !sed  '/Hydrovim running code to this line./d' ~/.config/nvim/hydrovim/.results_hydrovim2_py > ~/.config/nvim/hydrovim/.results_hydrovim3_py
+    :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.results_hydrovim3_py
 :endfunction
 
 
@@ -67,11 +86,7 @@ let g:FileType = &filetype
   :endfunction
 
 
-" Disable continuation of comments to the next line
-:set formatoptions-=cro
-
 nnoremap <silent> <F7> :call HydrovimClean() <cr><cr>
 nnoremap <silent> <F8> :call HydrovimRun()<cr><cr>
 inoremap <silent> <F8> <esc>:call HydrovimRun()<cr><cr>
-map <silent> <CR> ji
 
