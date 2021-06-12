@@ -28,6 +28,8 @@ let g:FileType = &filetype
     :let l:IsVariable = system("awk -e '/[a-zA-Z 0-9]=[a-zA-Z 0-9]/ {print $1}' ~/.config/nvim/hydrovim/.current_line_text.py")
     :let l:IsPrint = system("awk -e '$1 ~ /^print/ {print $1}' ~/.config/nvim/hydrovim/.current_line_text.py")
 
+
+    " ================= Variable Statement ======================    
     " if awk can find '=' in statement it is a variable 
     :if (l:IsVariable != "")
 
@@ -47,6 +49,7 @@ let g:FileType = &filetype
         :execute "normal!"..g:current_line.."gg"
 
 
+    " ================= Print Statement ======================    
     " if awk can find 'print' in the first characters of statement it is a print statement
     :elseif(l:IsPrint != "")
         let l:HydrovimRunned = 1
@@ -58,14 +61,27 @@ let g:FileType = &filetype
         :execute "normal! dd"
 
 
+    " ================= UNKNOWN Statement ======================    
     " if awk can't  find any   '=' or 'print' in the statement put inside a print(<statement>)
     :else
        
-       " check the current line it's not a function, class ,... or anything finished with --> ':'
-       :let l:Is_func = system("awk -e '$NF ~ /:$/ {print $0}' ~/.config/nvim/hydrovim/.current_line_text.py")
-       :if (l:Is_func == "")
+      " check the current line it's not a function, class, for, if ,... or anything finished with --> ':'
+      :let l:Is_func = system("awk -e '$NF ~ /:$/ {print $0}' ~/.config/nvim/hydrovim/.current_line_text.py")
+      
+
+      " put the one to the last inside '.multiline_text.py' for executing multiple line defining variable
+       :silent execute (g:current_line-1).."w! ~/.config/nvim/hydrovim/.one_before_last_line.py"
+       :let l:Lastline_of_multiline = system("awk -e '$NF ~ /,$/ {print $0}' ~/.config/nvim/hydrovim/.one_before_last_line.py")
+
+
+       " check the multiline defining variable
+       :let l:Is_multiline = system("awk -e '$NF ~ /,$/ {print $0}' ~/.config/nvim/hydrovim/.current_line_text.py")
+
+       
+       " ---------- it's not a function or class or for ,... and also not a multiline statement
+       :if (l:Is_func == ""  && l:Is_multiline == "" && l:Lastline_of_multiline == "") 
          :execute "normal! VyI#\<esc>pIprint(\<esc>A)" 
-         :let l:HydrovimRunned = 1
+         " :let l:HydrovimRunned = 1
 
          "put 'Hydrovim running code to this line' before the command ran
          :execute "normal!"..g:current_line.."ggOprint('Hydrovim running code to this line.')\<esc>"
@@ -73,7 +89,8 @@ let g:FileType = &filetype
          :silent execute "1,"..(g:current_line+4).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
 
          "delete breakout from main code 
-         :execute "normal! jjddkkddx"
+         :execute "normal!"..g:current_line.."ggddjdd"..g:current_line.."ggI\<Del>\<esc>"
+
        :endif
     :endif
 
