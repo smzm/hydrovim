@@ -81,14 +81,14 @@ let g:FileType = &filetype
        " ---------- it's not a function or class or for ,... and also not a multiline statement
        :if (l:Is_func == ""  && l:Is_multiline == "" && l:Lastline_of_multiline == "") 
          :execute "normal! VyI#\<esc>pIprint(\<esc>A)" 
-         " :let l:HydrovimRunned = 1
+         :let l:HydrovimRunned = 1
 
          "put 'Hydrovim running code to this line' before the command ran
          :execute "normal!"..g:current_line.."ggOprint('Hydrovim running code to this line.')\<esc>"
 
-         :silent execute "1,"..(g:current_line+4).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
+         :silent execute "1,"..(g:current_line+2).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
 
-         "delete breakout from main code 
+         "delete addition texts from main code 
          :execute "normal!"..g:current_line.."ggddjdd"..g:current_line.."ggI\<Del>\<esc>"
 
        :endif
