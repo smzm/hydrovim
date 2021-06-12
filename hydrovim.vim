@@ -94,16 +94,23 @@ let g:FileType = &filetype
        :endif
     :endif
 
+
+
+
+" ================================= IF any executable statement find and runned
     :if (l:HydrovimRunned == 1)
 
       "run code in temp_hydrovim.py and put the results in results_hydrovim file
-      :let results = system('python ~/.config/nvim/hydrovim/.temp_hydrovim.py > ~/.config/nvim/hydrovim/.results_hydrovim_py 2>&1') 
-      ":read !awk '$1 == '(Pdb)' {i=1;$1='  '} i{printf '# \t%s\n', $0}' ~/hydrovim/results_hydrovim
-      "run awk command to pick the answer
-      ":read !awk -f ~/.hydrovim/.awk_script ~/.hydrovim/.results_hydrovim
-      :silent !sed -n '/Hydrovim running code to this line./,$p' ~/.config/nvim/hydrovim/.results_hydrovim_py > ~/.config/nvim/hydrovim/.results_hydrovim2_py
-      :silent !sed  '/Hydrovim running code to this line./d' ~/.config/nvim/hydrovim/.results_hydrovim2_py > ~/.config/nvim/hydrovim/.results_hydrovim3_py
-      :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.results_hydrovim3_py
+      :let results = system('python ~/.config/nvim/hydrovim/.temp_hydrovim.py > ~/.config/nvim/hydrovim/.results_hydrovim_py 2> ~/.config/nvim/hydrovim/.error') 
+      :let l:is_error = system("awk '{print $0}' ~/.config/nvim/hydrovim/.error")
+      :if (l:is_error == "")
+        "pick the answer
+        :silent !sed -n '/Hydrovim running code to this line./,$p' ~/.config/nvim/hydrovim/.results_hydrovim_py > ~/.config/nvim/hydrovim/.results_hydrovim2_py
+        :silent !sed  '/Hydrovim running code to this line./d' ~/.config/nvim/hydrovim/.results_hydrovim2_py > ~/.config/nvim/hydrovim/.results_hydrovim3_py
+        :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.results_hydrovim3_py
+      :else 
+        :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.error
+      :endif
     :endif
 :endfunction
 
