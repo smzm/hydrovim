@@ -40,9 +40,12 @@ let g:FileType = &filetype
         "create temp_hydrovim.py and put all the text were before line ran
          :silent execute "1,"..(g:current_line+2).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
         "delete breakout from main code 
+        :execute "normal!"..g:current_line.."ggj"
         :execute "normal! dd"
+        :execute "normal!"..g:current_line.."ggj"
         :execute "normal! dd"
-        :execute "normal! k"
+        :execute "normal!"..g:current_line.."gg"
+
 
     " if awk can find 'print' in the first characters of statement it is a print statement
     :elseif(l:IsPrint != "")
