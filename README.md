@@ -29,7 +29,7 @@ source $HOME/.config/nvim/hydrovim/hydrovim.vim
 ```diff
 + syntax on
 ```
-to your `init.vim` file. (or vimrc file)
+to the top of your `init.vim` file. (or vimrc file)
 
 <br>
 
