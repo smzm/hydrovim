@@ -24,7 +24,12 @@ source $HOME/.config/nvim/hydrovim/hydrovim.vim
 
 <br>
 
-3. Add `syntax on` to your `init.vim` file. (or vimrc file)
+3. Add 
+
+```diff
++ syntax on
+```
+to your `init.vim` file. (or vimrc file)
 
 <br>
 
