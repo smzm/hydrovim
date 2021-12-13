@@ -33,4 +33,4 @@ source $HOME/.config/nvim/hydrovim/hydrovim.vim
 <br>
 
 - ###### Be Sure installed python and node before
-hydrovim use ```python``` and ```node``` alias for running codes.
+hydrovim use ```python``` and ```node``` aliases for running codes.
