@@ -4,7 +4,8 @@ A plugin can run Python and Javascript code and put the result inside your code 
 <br>
 
 ## Manually installation:
-- #### Clone repo in vim or nvim configuration directory.
+
+1. #### Clone repo in vim or nvim configuration directory.
  
 *For example in neovim:*
 ```
@@ -13,13 +14,17 @@ git clone https://github.com/smzm/hydrovim.git
 ```
 <br>
 
-- #### Source the address to the init.vim file or vimrc file.
+2. #### Source the address to the init.vim file or vimrc file.
 
 *For example in neovim go to init.vim and add this :*
   
 ``` 
 source $HOME/.config/nvim/hydrovim/hydrovim.vim
 ```
+
+<br>
+
+3. Add `syntax on` to your `init.vim` file. (or vimrc file)
 
 <br>
 
