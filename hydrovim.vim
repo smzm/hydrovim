@@ -4,9 +4,9 @@ let g:FileType = &filetype
       :silent! execute "normal! ms"
       "Delete all hydrovim comment
       :if g:FileType == "python"
-          :silent! execute "g/^# /d" 
+          :silent! execute "g/^#  /d" 
       :elseif g:FileType == "javascript"
-          :silent! execute "g/^// /d" 
+          :silent! execute "g/^//  /d" 
       :endif
       "go back to the last position
       :silent! execute "normal! `s"
@@ -25,14 +25,16 @@ let g:FileType = &filetype
     :silent execute g:current_line.."w! ~/.config/nvim/hydrovim/.current_line_text.py"
 
     " check the current line is a Variable, a print statement, or an unknown statemnet
-    :let l:IsVariable = system("awk -e '/[a-zA-Z 0-9]=[a-zA-Z 0-9]/ {print $1}' ~/.config/nvim/hydrovim/.current_line_text.py")
+    :let l:IsVariable = system("awk -f ~/.config/nvim/hydrovim/.awk_script_for_variable_statement_split1 ~/.config/nvim/hydrovim/.current_line_text.py | awk -f ~/.config/nvim/hydrovim/.awk_script_for_variable_statement_split2")
     :let l:IsPrint = system("awk -e '$1 ~ /^print/ {print $1}' ~/.config/nvim/hydrovim/.current_line_text.py")
+    
 
 
     " ================= Variable Statement ======================    
     " if awk can find '=' in statement it is a variable 
     :if (l:IsVariable != "")
 
+        
         :let l:HydrovimRunned = 1
 
         :execute "normal! 0vt yoprint()\<esc>hp"
@@ -52,6 +54,7 @@ let g:FileType = &filetype
     " ================= Print Statement ======================    
     " if awk can find 'print' in the first characters of statement it is a print statement
     :elseif(l:IsPrint != "")
+
         let l:HydrovimRunned = 1
         "put 'Hydrovim running code to this line' before the command ran
         :execute "normal!"..g:current_line.."ggOprint('Hydrovim running code to this line.')\<esc>"
@@ -69,7 +72,7 @@ let g:FileType = &filetype
       :let l:Is_func = system("awk -e '$NF ~ /:$/ {print $0}' ~/.config/nvim/hydrovim/.current_line_text.py")
       
 
-      " put the one to the last inside '.multiline_text.py' for executing multiple line defining variable
+      " put the one to the last inside '.multiline_text.py' for executing multiple line defining variable 
        :silent execute (g:current_line-1).."w! ~/.config/nvim/hydrovim/.one_before_last_line.py"
        :let l:Lastline_of_multiline = system("awk -e '$NF ~ /,$/ {print $0}' ~/.config/nvim/hydrovim/.one_before_last_line.py")
 
