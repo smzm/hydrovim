@@ -27,14 +27,13 @@ let g:FileType = &filetype
     " check the current line is a Variable, a print statement, or an unknown statemnet
     :let l:IsVariable = system("awk -f ~/.config/nvim/hydrovim/.awk_script_for_variable_statement_split1 ~/.config/nvim/hydrovim/.current_line_text.py | awk -f ~/.config/nvim/hydrovim/.awk_script_for_variable_statement_split2")
     :let l:IsPrint = system("awk -e '$1 ~ /^print/ {print $1}' ~/.config/nvim/hydrovim/.current_line_text.py")
-    :let l:IsBlank = system("")
 
 
     " ================= Variable Statement ======================    
     " if awk can find '=' in statement it is a variable 
-    :if (l:IsVariable != "" && ! getfsize("./.config/nvim/hydrovim/.current_line_text.py") < 1)
+    :if (l:IsVariable != "" && getfsize("./.config/nvim/hydrovim/.current_line_text.py") > 0)
         
-
+    
         :execute "normal! 0vt=yoprint()\<esc>hp"
         
         "put 'Hydrovim running code to this line' after print(variable)
