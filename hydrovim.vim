@@ -30,7 +30,7 @@ let g:FileType = &filetype
 
 
     " ================= Variable Statement ======================    
-    " if awk can find '=' in statement it is a variable 
+    " if awk can find '=' in statement it is a variable && the .current_line_text.py is not empty (means the current line is not blank)
     :if (l:IsVariable != "" && getfsize("./.config/nvim/hydrovim/.current_line_text.py") > 0)
         
     
