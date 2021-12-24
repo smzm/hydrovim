@@ -33,14 +33,15 @@ let g:FileType = &filetype
     " ================= Variable Statement ======================    
     " if awk can find '=' in statement it is a variable && the .current_line_text.py is not empty (means the current line is not blank)
     :if (l:IsVariable != "" && getfsize("./.config/nvim/hydrovim/.current_line_text.py") > 0)
-        
+
+
         let l:HydrovimRunned = 1
-        :execute "normal! 0vt yoprint()\<esc>hp"
+        :execute "normal! ^veyoprint()\<esc>hp"
         
         "put 'Hydrovim running code to this line' after print(variable)
         :execute "normal!"..g:current_line.."ggoprint('Hydrovim running code to this line.')\<esc>"
         "create temp_hydrovim.py and put all the text were before line ran
-         :silent execute "1,"..(g:current_line+2).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
+        :silent execute "1,"..(g:current_line+2).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
 
         "delete breakout from main code 
         :execute "normal!"..g:current_line.."ggj"
