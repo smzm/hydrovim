@@ -29,17 +29,19 @@ let g:FileType = &filetype
     :let l:IsPrint = system("awk -e '$1 ~ /^print/ {print $1}' ~/.config/nvim/hydrovim/.current_line_text.py")
 
 
+
     " ================= Variable Statement ======================    
     " if awk can find '=' in statement it is a variable && the .current_line_text.py is not empty (means the current line is not blank)
     :if (l:IsVariable != "" && getfsize("./.config/nvim/hydrovim/.current_line_text.py") > 0)
         
-    
-        :execute "normal! 0vt=yoprint()\<esc>hp"
+        let l:HydrovimRunned = 1
+        :execute "normal! 0vt yoprint()\<esc>hp"
         
         "put 'Hydrovim running code to this line' after print(variable)
         :execute "normal!"..g:current_line.."ggoprint('Hydrovim running code to this line.')\<esc>"
         "create temp_hydrovim.py and put all the text were before line ran
          :silent execute "1,"..(g:current_line+2).."w! ~/.config/nvim/hydrovim/.temp_hydrovim.py" 
+
         "delete breakout from main code 
         :execute "normal!"..g:current_line.."ggj"
         :execute "normal! dd"
@@ -113,6 +115,7 @@ let g:FileType = &filetype
         :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.error
       :endif
     :endif
+
 :endfunction
 
 
@@ -151,6 +154,6 @@ let g:FileType = &filetype
 
 
 nnoremap <silent> <F7> :call HydrovimClean() <cr><cr>
-nnoremap <silent> <F8> :call HydrovimRun()<cr><cr>
+" nnoremap <silent> <F8> :call HydrovimRun()<cr><cr>    " for debug
+nnoremap <F8> :call HydrovimRun()<cr><cr>
 inoremap <silent> <F8> <esc>:call HydrovimRun()<cr><cr>
-
