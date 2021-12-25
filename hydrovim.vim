@@ -29,7 +29,6 @@ let g:FileType = &filetype
     :let l:IsPrint = system("awk -e '$1 ~ /^print/ {print $1}' ~/.config/nvim/hydrovim/.current_line_text.py")
 
 
-
     " ================= Variable Statement ======================    
     " if awk can find '=' in statement it is a variable && the .current_line_text.py is not empty (means the current line is not blank)
     :if (l:IsVariable != "" && getfsize("./.config/nvim/hydrovim/.current_line_text.py") > 0)
@@ -155,6 +154,6 @@ let g:FileType = &filetype
 
 
 nnoremap <silent> <F7> :call HydrovimClean() <cr><cr>
-" nnoremap <silent> <F8> :call HydrovimRun()<cr><cr>    " for debug
-nnoremap <F8> :call HydrovimRun()<cr><cr>
+" nnoremap <silent> <F8> :call HydrovimRun()<cr><cr>   
+nnoremap <F8> :call HydrovimRun()<cr><cr>   
 inoremap <silent> <F8> <esc>:call HydrovimRun()<cr><cr>
