@@ -3,6 +3,14 @@ A plugin can run Python and Javascript code and put the result inside your code 
 
 <br>
 
+## Prerequisite
+Install [nui](https://github.com/MunifTanjim/nui.nvim) nvim plugin
+```vim
+Plug 'MunifTanjim/nui.nvim'
+```
+
+<br>
+
 ## Manually installation:
 
 1. #### Clone repo in vim or nvim configuration directory.
