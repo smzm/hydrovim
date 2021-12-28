@@ -31,8 +31,9 @@ let g:FileType = &filetype
 
     " ================= Variable Statement ======================    
     " if awk can find '=' in statement it is a variable && the .current_line_text.py is not empty (means the current line is not blank)
-    :if (l:IsVariable != "" && getfsize("./.config/nvim/hydrovim/.current_line_text.py") > 0)
-
+    :if (l:IsVariable != "") 
+    "&& getfsize("./.config/nvim/hydrovim/.current_line_text.py") > 0)
+        
 
         let l:HydrovimRunned = 1
         :execute "normal! ^veyoprint()\<esc>hp"
@@ -110,7 +111,12 @@ let g:FileType = &filetype
         "pick the answer
         :silent !sed -n '/Hydrovim running code to this line./,$p' ~/.config/nvim/hydrovim/.results_hydrovim_py > ~/.config/nvim/hydrovim/.results_hydrovim2_py
         :silent !sed  '/Hydrovim running code to this line./d' ~/.config/nvim/hydrovim/.results_hydrovim2_py > ~/.config/nvim/hydrovim/.results_hydrovim3_py
-        :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.results_hydrovim3_py
+        
+        " If you want to see the result in editor as comment uncomment this line and comment lua code configuration for nui
+        " :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.results_hydrovim3_py
+
+        :let g:hydrovimresult = system("cat ~/.config/nvim/hydrovim/.results_hydrovim3_py")
+
       :else 
         :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.error
       :endif
@@ -144,6 +150,69 @@ let g:FileType = &filetype
 
     :if g:FileType == "python"
         :call HydrovimPython()
+
+
+" Lua Configuration for nui 
+lua << EOF
+        local Popup = require("nui.popup")
+        local event = require("nui.utils.autocmd").event
+
+        local popup = Popup({
+          enter = true,
+          focusable = false,
+          border = {
+            text = {
+              top = " Hydrovim ",
+              bottom = " <ESC> to exit ",
+              bottom_align = "right"
+            },
+            style = "rounded",
+            highlight = "FloatBorder",
+            padding = {
+              1, 2
+            },
+          },
+        position = {
+            row = "30%",
+            col = "100%",
+          },
+          size = {
+            width = "50%",
+            height = "50%",
+          },
+          buf_options = {
+            modifiable = true,
+            readonly = false,
+          },
+        })
+
+        -- mount/open the component
+        popup:mount()
+
+        -- unmount component when cursor leaves buffer
+        popup:on(event.BufLeave, function()
+          popup:unmount()
+        end)
+
+        local result = vim.g.hydrovimresult
+
+        lines = {}
+        for s in result:gmatch("[^\r\n]+") do
+          table.insert(lines, s)
+        end
+
+        -- set content
+        vim.api.nvim_buf_set_lines(popup.bufnr, 0, 1, false, lines )
+
+        local ok = popup:map("n", "<esc>", function(bufnr)
+        vim.cmd[[
+          x
+        ]]
+        end, { noremap = true })
+
+EOF
+
+
     :elseif g:FileType == "javascript"
         :call HydrovimJavascript()
     :endif
@@ -151,6 +220,11 @@ let g:FileType = &filetype
     " Clean command prompt after calling hydrovimRun function
     echo ""
   :endfunction
+
+
+
+
+
 
 
 nnoremap <silent> <F7> :call HydrovimClean() <cr><cr>
