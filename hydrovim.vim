@@ -163,7 +163,7 @@ lua << EOF
           border = {
             text = {
               top = " Hydrovim ",
-              bottom = " <ESC> to exit ",
+              bottom = " q to exit ",
               bottom_align = "right"
             },
             style = "rounded",
@@ -204,11 +204,8 @@ lua << EOF
         -- set content
         vim.api.nvim_buf_set_lines(popup.bufnr, 0, 1, false, lines )
 
-        local ok = popup:map("n", "<esc>", function(bufnr)
-        vim.cmd[[
-          x
-        ]]
-        end, { noremap = true })
+
+        vim.cmd[[nnoremap <silent> q :call Exit_unmap_q()<CR>]]
 
 EOF
 
@@ -221,6 +218,12 @@ EOF
     echo ""
   :endfunction
 
+
+
+function Exit_unmap_q()
+  :q 
+  unmap <silent> q
+endfunction
 
 
 
