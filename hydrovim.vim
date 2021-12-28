@@ -118,7 +118,8 @@ let g:FileType = &filetype
         :let g:hydrovimresult = system("cat ~/.config/nvim/hydrovim/.results_hydrovim3_py")
 
       :else 
-        :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.error
+        " :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.error
+        :let g:hydrovimresult = system("cat ~/.config/nvim/hydrovim/.error")
       :endif
     :endif
 
