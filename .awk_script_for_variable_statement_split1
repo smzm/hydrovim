@@ -1,5 +1,5 @@
 {
-      if ($0 ~ /[^=]=[^=]/) {
+      if ($0 ~ /[^=><!]=[^=><!]/) {
         FS="=";         # if line captured has '=' , changing the FS to the '='
         $0=$0;          # need to refresh the $0 variable after changing $0 
         print $1;       # return first part that is before the '='
