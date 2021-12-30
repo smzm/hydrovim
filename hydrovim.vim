@@ -86,7 +86,7 @@ let g:FileType = &filetype
 
 
            " Check the Statement is 'import' module
-           :let l:IsImport = system("awk -e '/^import|from\s/ {print $0}' ~/.config/nvim/hydrovim/.current_line_clean.py")
+           :let l:IsImport = system("awk -e '/^[import|from]\s*/ {print $0}' ~/.config/nvim/hydrovim/.current_line_clean.py")
 
 
             
