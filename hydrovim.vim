@@ -86,10 +86,9 @@ let g:FileType = &filetype
 
 
            " Check the Statement is 'import' module
-           :let l:IsImport = system("awk -e '/^[import|from]\s*/ {print $0}' ~/.config/nvim/hydrovim/.current_line_clean.py")
+           :let l:IsImport = system("awk -e '/^import\s*|from\s*/ {print $0}' ~/.config/nvim/hydrovim/.current_line_clean.py")
 
 
-            
            " ---------- it's not a function or class or for ,... and also not a multiline statement
            :if (l:Is_func == ""  && l:Is_multiline == "" && l:Lastline_of_multiline == "" && l:IsImport == "")
              :let g:HydrovimRunned = 1
