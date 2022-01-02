@@ -30,14 +30,6 @@ git clone https://github.com/smzm/hydrovim.git
 source $HOME/.config/nvim/hydrovim/hydrovim.vim
 ```
 
-<br>
-
-3. Add 
-
-```diff
-+ syntax on
-```
-to the top of your `init.vim` file. (or vimrc file)
 
 <br>
 
