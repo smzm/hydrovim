@@ -33,9 +33,9 @@ source $HOME/.config/nvim/hydrovim/hydrovim.vim
 
 <br>
 
-- #### Use ```F8``` for running hydrovim and ```F7``` for cleaning the result.
+- #### Use ```F8``` for running hydrovim .
 
 <br>
 
 - ###### Be Sure installed python and node before
-hydrovim use ```python``` and ```node``` aliases for running codes.
+hydrovim use ```python``` aliases for running codes.
