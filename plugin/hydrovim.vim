@@ -172,6 +172,10 @@ lua << EOF
         local result = vim.g.hydrovimresult
 
         lines = {}
+        for s in result:gmatch("[^\r\n]+") do
+          table.insert(lines, s)
+        end
+
 
 
         -- set content
