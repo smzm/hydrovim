@@ -1,5 +1,5 @@
 # Hydrovim
-A plugin for vim(nvim) can run Python code and show the result inside your code editor.
+A plugin for nvim can run Python code and show the result inside your code editor.
 
 <br>
 
