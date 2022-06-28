@@ -118,12 +118,12 @@ let g:FileType = &filetype
         :silent !sed  '/Hydrovim running code to this line./d' ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim2_py > ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim3_py
         
         " If you want to see the result in editor as comment uncomment this line and comment lua code configuration for nui
-        " :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.results_hydrovim3_py
+        " :read !awk '{print "\#    "$0}' ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim3_py
 
         :let g:hydrovimresult = system("cat ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim3_py")
 
       :else 
-        " :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.error
+        " :read !awk '{print "\#    "$0}' ~/local/share/nvim/plugged/hydrovim/plugin/.error
         :let g:hydrovimresult = system("cat ~/local/share/nvim/plugged/hydrovim/plugin/.error")
       :endif
 
@@ -224,4 +224,3 @@ endfunction
 " nnoremap <F8> :call HydrovimRun()<cr><cr>   
 nnoremap <silent> <F8> :call HydrovimRun()<cr><cr>   
 inoremap <silent> <F8> <esc>:call HydrovimRun()<cr><cr>
-
