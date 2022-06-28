@@ -224,3 +224,4 @@ endfunction
 " nnoremap <F8> :call HydrovimRun()<cr><cr>   
 nnoremap <silent> <F8> :call HydrovimRun()<cr><cr>   
 inoremap <silent> <F8> <esc>:call HydrovimRun()<cr><cr>
+
