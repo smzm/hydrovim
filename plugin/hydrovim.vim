@@ -22,17 +22,17 @@ let g:FileType = &filetype
     let g:HydrovimRunned = 0
 
     " put the current line (The line should executed) inside '.current_line.py'
-    :silent execute g:current_line.."w! ~/.config/nvim/hydrovim/.current_line.py"
+    :silent execute g:current_line.."w! ~/local/share/nvim/plugged/hydrovim/plugin/.current_line.py"
     " Put from first line until the current line (The line should executed) inside 'from_first_until_current.py'
-    :silent execute "1,"..(g:current_line-1).."w! ~/.config/nvim/hydrovim/.from_first_until_current.py"
+    :silent execute "1,"..(g:current_line-1).."w! ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py"
 
     " clean the current line from the comment
-    :silent ! awk -f ~/.config/nvim/hydrovim/.awk_script_for_cleaning ~/.config/nvim/hydrovim/.current_line.py > ~/.config/nvim/hydrovim/.current_line_clean.py
+    :silent ! awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_cleaning ~/local/share/nvim/plugged/hydrovim/plugin/.current_line.py > ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py
 
 
     " check the current line is a Variable, a print statement, or an unknown statemnet
-    :let l:IsVariable = system("awk -f ~/.config/nvim/hydrovim/.awk_script_for_variable_statement_split1 ~/.config/nvim/hydrovim/.current_line_clean.py | awk -f ~/.config/nvim/hydrovim/.awk_script_for_variable_statement_split2")
-    :let l:IsPrint = system("awk -e '$1 ~ /^print/ {print $1}' ~/.config/nvim/hydrovim/.current_line_clean.py")
+    :let l:IsVariable = system("awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_variable_statement_split1 ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py | awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_variable_statement_split2")
+    :let l:IsPrint = system("awk -e '$1 ~ /^print/ {print $1}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
 
 
     " ================= Variable Statement ======================    
@@ -42,13 +42,13 @@ let g:FileType = &filetype
         let g:HydrovimRunned = 1
 
         " Add the current line to the end of '.from_first_until_current.py' file 
-        :silent ! cat ~/.config/nvim/hydrovim/.current_line_clean.py >> ~/.config/nvim/hydrovim/.from_first_until_current.py
+        :silent ! cat ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
 
         " Add 'print('Hydrovim running code to this line.')' to the end of '.from_first_until_current.py' file
-        :silent ! echo "print('Hydrovim running code to this line.')" >> ~/.config/nvim/hydrovim/.from_first_until_current.py
+        :silent ! echo "print('Hydrovim running code to this line.')" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
 
         " Add 'print(l:IsVariable)' to the end of '.from_first_until_current.py' file. 
-        :silent ! current_line_hydrovim=`awk -f ~/.config/nvim/hydrovim/.awk_script_for_variable_statement_split1 ~/.config/nvim/hydrovim/.current_line_clean.py | awk -f ~/.config/nvim/hydrovim/.awk_script_for_variable_statement_split2 | tr -d '[:space:]'` ; echo "print($current_line_hydrovim)" >> ~/.config/nvim/hydrovim/.from_first_until_current.py
+        :silent ! current_line_hydrovim=`awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_variable_statement_split1 ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py | awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_variable_statement_split2 | tr -d '[:space:]'` ; echo "print($current_line_hydrovim)" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
 
 
 
@@ -60,10 +60,10 @@ let g:FileType = &filetype
 
 
         "put 'Hydrovim running code to this line' before the command ran
-        :silent ! echo "print('Hydrovim running code to this line.')" >> ~/.config/nvim/hydrovim/.from_first_until_current.py
+        :silent ! echo "print('Hydrovim running code to this line.')" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
 
         " Add the current line to the end of '.from_first_until_current.py' file
-        :silent ! cat ~/.config/nvim/hydrovim/.current_line_clean.py >> ~/.config/nvim/hydrovim/.from_first_until_current.py
+        :silent ! cat ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
 
 
     
@@ -73,20 +73,20 @@ let g:FileType = &filetype
     " if awk can't  find any   '=' or 'print' in the statement put inside a print(<statement>)
     :else
           " check the current line it's not a function, class, for, if ,... or anything finished with --> ':'
-          :let l:Is_func = system("awk -e '$NF ~ /:$/ {print $0}' ~/.config/nvim/hydrovim/.current_line_clean.py")
+          :let l:Is_func = system("awk -e '$NF ~ /:$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
           
 
           " put the one to the last inside '.multiline_text.py' for executing multiple line defining variable 
-           :silent execute (g:current_line-1).."w! ~/.config/nvim/hydrovim/.one_before_last_line.py"
-           :let l:Lastline_of_multiline = system("awk -e '$NF ~ /,$/ {print $0}' ~/.config/nvim/hydrovim/.one_before_last_line.py")
+           :silent execute (g:current_line-1).."w! ~/local/share/nvim/plugged/hydrovim/plugin/.one_before_last_line.py"
+           :let l:Lastline_of_multiline = system("awk -e '$NF ~ /,$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.one_before_last_line.py")
 
 
            " check the multiline defining variable ends with ','
-           :let l:Is_multiline = system("awk -e '$NF ~ /,$/ {print $0}' ~/.config/nvim/hydrovim/.current_line_clean.py")
+           :let l:Is_multiline = system("awk -e '$NF ~ /,$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
 
 
            " Check the Statement is 'import' module
-           :let l:IsImport = system("awk -e '/^import\s*|from\s*/ {print $0}' ~/.config/nvim/hydrovim/.current_line_clean.py")
+           :let l:IsImport = system("awk -e '/^import\s*|from\s*/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
 
 
            " ---------- it's not a function or class or for ,... and also not a multiline statement
@@ -95,8 +95,8 @@ let g:FileType = &filetype
              execute "normal! o" . l:IsImport 
 
 
-             :silent !  echo "print('Hydrovim running code to this line.')" >> ~/.config/nvim/hydrovim/.from_first_until_current.py
-             :silent ! current_line_hydrovim=`sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' ~/.config/nvim/hydrovim/.current_line_clean.py`;echo "print($current_line_hydrovim)" >> ~/.config/nvim/hydrovim/.from_first_until_current.py
+             :silent !  echo "print('Hydrovim running code to this line.')" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
+             :silent ! current_line_hydrovim=`sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py`;echo "print($current_line_hydrovim)" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
 
 
            :endif
@@ -110,21 +110,21 @@ let g:FileType = &filetype
     :if (g:HydrovimRunned == 1)
 
       "run code in temp_hydrovim.py and put the results in results_hydrovim file
-      :let results = system('python ~/.config/nvim/hydrovim/.from_first_until_current.py > ~/.config/nvim/hydrovim/.results_hydrovim_py 2> ~/.config/nvim/hydrovim/.error') 
-      :let l:is_error = system("awk '{print $0}' ~/.config/nvim/hydrovim/.error")
+      :let results = system('python ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py > ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim_py 2> ~/local/share/nvim/plugged/hydrovim/plugin/.error') 
+      :let l:is_error = system("awk '{print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.error")
       :if (l:is_error == "")
         "pick the answer
-        :silent !sed -n '/Hydrovim running code to this line./,$p' ~/.config/nvim/hydrovim/.results_hydrovim_py > ~/.config/nvim/hydrovim/.results_hydrovim2_py
-        :silent !sed  '/Hydrovim running code to this line./d' ~/.config/nvim/hydrovim/.results_hydrovim2_py > ~/.config/nvim/hydrovim/.results_hydrovim3_py
+        :silent !sed -n '/Hydrovim running code to this line./,$p' ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim_py > ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim2_py
+        :silent !sed  '/Hydrovim running code to this line./d' ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim2_py > ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim3_py
         
         " If you want to see the result in editor as comment uncomment this line and comment lua code configuration for nui
         " :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.results_hydrovim3_py
 
-        :let g:hydrovimresult = system("cat ~/.config/nvim/hydrovim/.results_hydrovim3_py")
+        :let g:hydrovimresult = system("cat ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim3_py")
 
       :else 
         " :read !awk '{print "\#    "$0}' ~/.config/nvim/hydrovim/.error
-        :let g:hydrovimresult = system("cat ~/.config/nvim/hydrovim/.error")
+        :let g:hydrovimresult = system("cat ~/local/share/nvim/plugged/hydrovim/plugin/.error")
       :endif
 
 " Lua Configuration for nui 
@@ -172,7 +172,8 @@ lua << EOF
         local result = vim.g.hydrovimresult
 
         lines = {}
-        for s in result:gmatch("[^\r\n]+") do
+        for s in result:gmatch("[^
+]+") do
           table.insert(lines, s)
         end
 
