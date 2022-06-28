@@ -172,10 +172,7 @@ lua << EOF
         local result = vim.g.hydrovimresult
 
         lines = {}
-        for s in result:gmatch("[^
-]+") do
-          table.insert(lines, s)
-        end
+
 
         -- set content
         vim.api.nvim_buf_set_lines(popup.bufnr, 0, 1, false, lines )
