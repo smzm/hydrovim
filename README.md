@@ -26,4 +26,4 @@ Put the cursor on the desire line code and press ```F8``` for running hydrovim .
 <br>
 
 - ###### Be Sure `python` and `awk` is installed.
-hydrovim use ```python``` aliases for running codes.
+> hydrovim use ```python``` aliases for running codes.
