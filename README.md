@@ -23,6 +23,9 @@ Plug 'smzm/hydorvim'
 ## Usage : 
 Put the cursor on the desire line code and press ```F8``` for running hydrovim .
 
+![hydrovim](https://user-images.githubusercontent.com/39596095/176358434-b93b8614-9fef-4eb9-8789-315056d8786c.jpg)
+
+
 <br>
 
 - ###### Be Sure `python` and `awk` is installed.
