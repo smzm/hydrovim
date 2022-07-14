@@ -24,18 +24,63 @@ let g:FileType = &filetype
     " if awk can find '=' in statement it is a variable
     :if (l:IsVariable != "") 
         
-        let g:HydrovimRunned = 1
 
-        " Add the current line to the end of '.from_first_until_current.py' file 
-        :silent ! cat ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
+        " Check the line has '=' in it and alse end with ','
+        :let l:Is_var_multiline = system("awk -e '$0 ~ /[^=><!]=[^=><!]/ && $NF ~ /,$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
 
-        " Add 'print('Hydrovim running code to this line.')' to the end of '.from_first_until_current.py' file
-        :silent ! echo "print('Hydrovim running code to this line.')" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
+        :if (l:Is_var_multiline != "")
 
-        " Add 'print(l:IsVariable)' to the end of '.from_first_until_current.py' file. 
-        :silent ! current_line_hydrovim=`awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_variable_statement_split1 ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py | awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_variable_statement_split2 | tr -d '[:space:]'` ; echo "print($current_line_hydrovim)" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
+            " store variable name
+            :let l:variable_name=system("awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_variable_statement_split1 ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py | awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_variable_statement_split2 | tr -d '[:space:]'")
+
+            " Create a loop and forward line by line until the end of the defenition
+            while (l:Is_var_multiline != "")
+
+               " add the current line to the end of from_first_until_current.py
+                :silent ! cat ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
+                
+                " Change the current line to the next line 
+                :let g:current_line = g:current_line + 1
+
+               " Put the current line (The line should executed) inside '.current_line.py'
+                :silent execute g:current_line.."w! ~/local/share/nvim/plugged/hydrovim/plugin/.current_line.py"
+
+               " clean the current line from the comment
+                :silent ! awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_cleaning ~/local/share/nvim/plugged/hydrovim/plugin/.current_line.py > ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py
+
+               " Check it's still a multiline statement for next loop check
+                :let l:Is_var_multiline = system("awk -e '$NF ~ /,$/ || $NF ~ /)$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
+
+               " Check it's end of multiline statement
+                :let l:last_line = system("awk -e '$NF ~ /)$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
+                if (l:last_line != "" )
+                    :silent ! cat ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
+                    break
+                endif
+
+            endwhile
+
+            let g:HydrovimRunned = 1
+            :silent ! echo "print('Hydrovim running code to this line.')" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
+            " write print('variable_name') to the end of the .from_first_until_current.py
+            :execute  "w !echo 'print(".l:variable_name.")' >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py"
 
 
+
+            :else 
+            " If it's not a multiline variable (one line variable definition)
+            let g:HydrovimRunned = 1
+
+            " Add the current line to the end of '.from_first_until_current.py' file 
+            :silent ! cat ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
+
+            " Add 'print('Hydrovim running code to this line.')' to the end of '.from_first_until_current.py' file
+            :silent ! echo "print('Hydrovim running code to this line.')" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
+
+            " Add 'print(l:IsVariable)' to the end of '.from_first_until_current.py' file. 
+            :silent ! current_line_hydrovim=`awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_variable_statement_split1 ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py | awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_variable_statement_split2 | tr -d '[:space:]'` ; echo "print($current_line_hydrovim)" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
+
+        :endif
 
     " ================= Print Statement ======================    
     " if awk can find 'print' in the first characters of statement it is a print statement
@@ -61,7 +106,7 @@ let g:FileType = &filetype
           :let l:Is_func = system("awk -e '$NF ~ /:$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
           
 
-          " put the one to the last inside '.multiline_text.py' for executing multiple line defining variable 
+          " put one before last line  inside '.multiline_text.py' for executing multiple line defining variable 
            :silent execute (g:current_line-1).."w! ~/local/share/nvim/plugged/hydrovim/plugin/.one_before_last_line.py"
            :let l:Lastline_of_multiline = system("awk -e '$NF ~ /,$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.one_before_last_line.py")
 
@@ -77,7 +122,7 @@ let g:FileType = &filetype
            " ---------- it's not a function or class or for ,... and also not a multiline statement
            :if (l:Is_func == ""  && l:Is_multiline == "" && l:Lastline_of_multiline == "" && l:IsImport == "")
              :let g:HydrovimRunned = 1
-             execute "normal! o" . l:IsImport 
+             " execute "normal! o" . l:IsImport 
 
 
              :silent !  echo "print('Hydrovim running code to this line.')" >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
