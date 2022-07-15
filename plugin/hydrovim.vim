@@ -27,8 +27,8 @@ let g:FileType = &filetype
             :silent execute "1,"..(g:current_line).."w! ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py"
             
             :execute  "w !echo '".l:highlighted_text."' > ~/local/share/nvim/plugged/hydrovim/plugin/.current_line.py"
-        " catch /.*/
-        "     echoerr "Hydrovim Error ::::: === Just select variables ==="
+        catch /.*/
+            echoerr "Hydrovim Error ::::: === Just select variables ==="
         finally
             let @@ = a_save
         endtry
