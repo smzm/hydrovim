@@ -1,15 +1,39 @@
 let g:FileType = &filetype
 
 
-:function HydrovimPython()
-    
+
+:function HydrovimPython(mode)
+
     " this variable is a flag . if will be 1 hydrovim execute
     let g:HydrovimRunned = 0
+    
+    " ================= if it's in normal mode ======================    
+    if (a:mode == "normal")
+        " put the current line (The line should executed) inside '.current_line.py'
+        :silent execute g:current_line.."w! ~/local/share/nvim/plugged/hydrovim/plugin/.current_line.py"
+        " Put from first line until the current line (The line should executed) inside 'from_first_until_current.py'
+        :silent execute "1,"..(g:current_line-1).."w! ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py"
 
-    " put the current line (The line should executed) inside '.current_line.py'
-    :silent execute g:current_line.."w! ~/local/share/nvim/plugged/hydrovim/plugin/.current_line.py"
-    " Put from first line until the current line (The line should executed) inside 'from_first_until_current.py'
-    :silent execute "1,"..(g:current_line-1).."w! ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py"
+        
+    " ================= if it's in visual mode ======================    
+    " get highlithed statement and put inside a variable
+    elseif (a:mode == 'visual')
+        try
+            let a_save = @@
+            silent ! execute 'normal! `<v`>"ay'
+            let l:highlighted_text = @a
+            echo l:highlighted_text
+            " Put from first line until the current line (The line should executed) inside 'from_first_until_current.py'
+            :silent execute "1,"..(g:current_line).."w! ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py"
+            
+            :execute  "w !echo '".l:highlighted_text."' > ~/local/share/nvim/plugged/hydrovim/plugin/.current_line.py"
+        catch /.*/
+            echoerr "Hydrovim Error ::::: === Just select variables ==="
+        finally
+            let @@ = a_save
+        endtry
+    endif
+
 
     " clean the current line from the comment
     :silent ! awk -f ~/local/share/nvim/plugged/hydrovim/plugin/.awk_script_for_cleaning ~/local/share/nvim/plugged/hydrovim/plugin/.current_line.py > ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py
@@ -20,12 +44,15 @@ let g:FileType = &filetype
     :let l:IsPrint = system("awk -e '$1 ~ /^print/ {print $1}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
 
 
-    " ================= Variable Statement ======================    
+
+
+
+    "================= Variable Statement ======================    
     " if awk can find '=' in statement it is a variable
     :if (l:IsVariable != "") 
         
 
-        " Check the line has '=' in it and alse end with ','
+        " Check the line has '=' in it and also finished with ','
         :let l:Is_var_multiline = system("awk -e '$0 ~ /[^=><!]=[^=><!]/ && $NF ~ /,$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
 
         :if (l:Is_var_multiline != "")
@@ -221,14 +248,13 @@ EOF
 
 
 
-:function HydrovimRun()
+:function HydrovimRun(mode)
     "get the current line
     :let g:current_line = line(".") 
 
     :if g:FileType == "python"
-        :call HydrovimPython()
+        :call HydrovimPython(a:mode)
         :call HydrovimExec()
-
     :endif
 
     " Clean command prompt after calling hydrovimRun function
@@ -245,5 +271,6 @@ endfunction
 
 
 
-nnoremap <silent> <F8> :call HydrovimRun()<cr><cr>   
-inoremap <silent> <F8> <esc>:call HydrovimRun()<cr><cr>
+nnoremap <silent> <F8> :call HydrovimRun('normal')<cr><cr>   
+inoremap <silent> <F8> <esc>:call HydrovimRun('normal')<cr><cr>
+vnoremap <silent> <F8> :call HydrovimRun('visual')<cr><cr>
