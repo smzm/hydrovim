@@ -52,7 +52,7 @@ let g:FileType = &filetype
                 :let l:Is_var_multiline = system("awk -e '$NF ~ /,$/ || $NF ~ /)$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
 
                " Check it's end of multiline statement
-                :let l:last_line = system("awk -e '$NF ~ /)$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
+                :let l:last_line = system("awk -e '$NF ~ /)$/ || $NF ~ /]$/ {print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py")
                 if (l:last_line != "" )
                     :silent ! cat ~/local/share/nvim/plugged/hydrovim/plugin/.current_line_clean.py >> ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py
                     break
