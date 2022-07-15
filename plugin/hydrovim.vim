@@ -20,15 +20,15 @@ let g:FileType = &filetype
     elseif (a:mode == 'visual')
         try
             let a_save = @@
-            silent ! execute 'normal! `<v`>"ay'
+            silent execute 'normal! `<v`>"ay'
             let l:highlighted_text = @a
             echo l:highlighted_text
             " Put from first line until the current line (The line should executed) inside 'from_first_until_current.py'
             :silent execute "1,"..(g:current_line).."w! ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py"
             
             :execute  "w !echo '".l:highlighted_text."' > ~/local/share/nvim/plugged/hydrovim/plugin/.current_line.py"
-        catch /.*/
-            echoerr "Hydrovim Error ::::: === Just select variables ==="
+        " catch /.*/
+        "     echoerr "Hydrovim Error ::::: === Just select variables ==="
         finally
             let @@ = a_save
         endtry
