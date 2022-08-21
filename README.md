@@ -14,7 +14,7 @@ https://user-images.githubusercontent.com/39596095/185796284-4904327b-ae0d-4dfc-
 ##  ✅ Installation
 
 - ### Prerequisite
-Install [nui](https://github.com/MunifTanjim/nui.nvim) nvim plugin
+Install [nui](https://github.com/MunifTanjim/nui.nvim) nvim plugin :
 ```vim
 Plug 'MunifTanjim/nui.nvim'
 ```
