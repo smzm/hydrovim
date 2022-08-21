@@ -3,6 +3,10 @@ The nvim plugin that runs Python code and displays the result in your code edito
 
 ![hydrovim](https://user-images.githubusercontent.com/39596095/185785721-00bbf151-697a-4ffa-9692-5589463be80c.png)
 
+##  🎞️ Demo 
+https://user-images.githubusercontent.com/39596095/185796284-4904327b-ae0d-4dfc-ba40-7448eba9009e.mp4
+
+
 
 <br>
 
