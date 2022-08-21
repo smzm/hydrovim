@@ -28,7 +28,7 @@ Plug 'smzm/hydorvim'
 
 <br>
 
-- ###### Be Sure `python` and `awk` is installed.
+- ##### Be Sure `python` and `awk` is installed.
 > hydrovim use ```python``` command for running codes.
 
 
