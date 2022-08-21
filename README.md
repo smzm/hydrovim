@@ -11,16 +11,20 @@ https://user-images.githubusercontent.com/39596095/185796284-4904327b-ae0d-4dfc-
 <br>
 <br>
 
-## Prerequisite
+## Installation
+
+### Prerequisite
 Install [nui](https://github.com/MunifTanjim/nui.nvim) nvim plugin
 ```vim
 Plug 'MunifTanjim/nui.nvim'
 ```
 
-<br>
+- ##### Also be Sure `python` and `awk` is installed.
+> hydrovim use ```python``` command for running codes.
+
 <br>
 
-## Installing `hydrovim` :
+### Installing `hydrovim` :
 For installing with vim plug : 
 ```vim
 Plug 'smzm/hydorvim'
@@ -28,8 +32,7 @@ Plug 'smzm/hydorvim'
 
 <br>
 
-- ##### Be Sure `python` and `awk` is installed.
-> hydrovim use ```python``` command for running codes.
+
 
 
 <br>
