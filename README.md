@@ -31,16 +31,13 @@ Plug 'smzm/hydorvim'
 ```
 
 
-<br>
-
-
 
 
 <br>
 <br>
 
 ## ✅ Usage : 
-- Put the cursor on the desire line code and press `F8` for running hydrovim from ***first line*** to the ***current line***.
+- Put the cursor on the desire line of code and press `F8` for running hydrovim from ***first line*** to the ***current line***.
 - You can highlight code in visual mode and run hydrovim with `F8`.
 - Use `q` key for close hydrovim pop-up.
 
