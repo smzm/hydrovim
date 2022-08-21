@@ -168,8 +168,8 @@ let g:FileType = &filetype
 
       "run code in temp_hydrovim.py and put the results in results_hydrovim file
       :let results = system('python ~/local/share/nvim/plugged/hydrovim/plugin/.from_first_until_current.py > ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim_py 2> ~/local/share/nvim/plugged/hydrovim/plugin/.error') 
-      :let l:is_error = system("awk '{print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.error")
-      :if (l:is_error == "")
+      :let g:is_error = system("awk '{print $0}' ~/local/share/nvim/plugged/hydrovim/plugin/.error")
+      :if (g:is_error == "")
         "pick the answer
         :silent !sed -n '/Hydrovim running code to this line./,$p' ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim_py > ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim2_py
         :silent !sed  '/Hydrovim running code to this line./d' ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim2_py > ~/local/share/nvim/plugged/hydrovim/plugin/.results_hydrovim3_py
@@ -183,54 +183,84 @@ let g:FileType = &filetype
         :let g:hydrovimresult = system("cat ~/local/share/nvim/plugged/hydrovim/plugin/.error")
       :endif
 
-" Lua Configuration for nui 
+
 lua << EOF
-        local Popup = require("nui.popup")
-        local event = require("nui.utils.autocmd").event
+    local params = vim.lsp.util.make_position_params()
+    local Popup = require("nui.popup")
+    local event = require("nui.utils.autocmd").event
 
-        local popup = Popup({
-          enter = true,
-          focusable = false,
-          border = {
-            text = {
-              top = " Hydrovim ",
-              bottom = " q to exit ",
-              bottom_align = "right"
-            },
-            style = "rounded",
-            highlight = "FloatBorder",
-            padding = {
-              1, 2
-            },
+    local is_error = vim.g.is_error
+
+    if  is_error == "" then 
+        vim.cmd[[highlight hydroBorder guifg=#00b061]]
+        vim.cmd[[highlight hydroBack guifg=#b4dbca]]
+    else 
+        vim.cmd[[highlight hydroBorder guifg=#b30e6e]]
+        vim.cmd[[highlight hydroBack guifg=#d6b2c7]]
+    end
+
+
+
+    local popup = Popup({
+        enter = true,
+        focusable = true,
+        border = {
+        text = {
+       --      top = " Hydrovim ",
+        --     bottom = " q to exit ",
+        --     bottom_align = "right"
           },
+        style = "rounded",
+        highlight = "hydroBorder",
+          padding = {
+            top = 1,
+            left = 5,
+          },
+        },
+    relative = {
+        type = 'buf',
         position = {
-            row = "30%",
-            col = "100%",
-          },
-          size = {
-            width = "50%",
-            height = "50%",
-          },
-          buf_options = {
-            modifiable = true,
-            readonly = false,
-          },
-        })
+          row = params.position.line,
+          col = 0
+          -- col = params.position.character,
+            }
+        },
+    position = {
+    row = 0,
+    col = 2
+    },
+    size = {
+          width = "50%",
+          height = "25%",
+        },
+        buf_options = {
+          modifiable = true,
+          readonly = false,
+        },
+      win_options = {
+        winblend = 10,
+        winhighlight = "Normal:hydroBack,FloatBorder:FloatBorder", 
+      }
+      })
 
-        -- mount/open the component
-        popup:mount()
+      -- mount/open the component
+      popup:mount()
 
-        -- unmount component when cursor leaves buffer
-        popup:on(event.BufLeave, function()
-          popup:unmount()
-        end)
+    -- unmount component when cursor leaves buffer
+      popup:on(event.BufLeave, function()
+        popup:unmount()
+      end)
 
-        local result = vim.g.hydrovimresult
+      popup:mount()
 
-        lines = {}
-        for s in result:gmatch("[^\r\n]+") do
-          table.insert(lines, s)
-        end
+
+      local result = vim.g.hydrovimresult
+
+      lines = {}
+      for s in result:gmatch("[^
+]+") do
+        table.insert(lines, s)
+      end
 
 
 
@@ -239,7 +269,10 @@ lua << EOF
 
 
         vim.cmd[[nnoremap <silent> q :call Exit_unmap_q()<CR>]]
+
+
 EOF
+
 
     :endif
 :endfunction
@@ -249,6 +282,7 @@ EOF
 
 
 :function HydrovimRun(mode)
+
     "get the current line
     :let g:current_line = line(".") 
 
