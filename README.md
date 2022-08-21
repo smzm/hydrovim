@@ -11,7 +11,7 @@ https://user-images.githubusercontent.com/39596095/185796284-4904327b-ae0d-4dfc-
 <br>
 <br>
 
-## Installation
+##  ✅ Installation
 
 ### Prerequisite
 Install [nui](https://github.com/MunifTanjim/nui.nvim) nvim plugin
@@ -38,7 +38,7 @@ Plug 'smzm/hydorvim'
 <br>
 <br>
 
-## Usage : 
+## ✅ Usage : 
 - Put the cursor on the desire line code and press `F8` for running hydrovim from ***first line*** to ***current line***.
 - You can highlight code in visual mode and run hydrovim with `F8`.
 - use `q` for close hydrovim pop-up.
