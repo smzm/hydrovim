@@ -19,7 +19,7 @@ Install [nui](https://github.com/MunifTanjim/nui.nvim) nvim plugin
 Plug 'MunifTanjim/nui.nvim'
 ```
 
-- ##### Also be Sure `python` and `awk` is installed.
+- ##### ⚠️ : Also be Sure `python` and `awk` is installed.
 > hydrovim use ```python``` command for running codes.
 
 <br>
