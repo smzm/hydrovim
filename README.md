@@ -24,8 +24,9 @@ Plug 'smzm/hydorvim'
 <br>
 
 ## Usage : 
-Put the cursor on the desire line code and press ```F8``` for running hydrovim from ***first line*** to ***current line***.
+- Put the cursor on the desire line code and press ```F8``` for running hydrovim from ***first line*** to ***current line***.
 
+- use `q` for exit 
 
 
 <br>
