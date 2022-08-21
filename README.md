@@ -1,5 +1,5 @@
 # Hydrovim
-The nvim plugin that runs Python code and displays the result in your code editor.
+A **Neovim** plugin that runs ***Python*** code and displays the result in your code editor.
 
 ![hydrovim](https://user-images.githubusercontent.com/39596095/185785721-00bbf151-697a-4ffa-9692-5589463be80c.png)
 
