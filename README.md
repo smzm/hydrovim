@@ -1,5 +1,8 @@
+<img src="https://neovim.io/logos/neovim-mark-flat.png" align="right" width="100" />
+
 # Hydrovim
 A **Neovim** plugin that runs ***Python*** code and displays the result in your code editor.
+
 
 ![hydrovim](https://user-images.githubusercontent.com/39596095/185785721-00bbf151-697a-4ffa-9692-5589463be80c.png)
 
