@@ -30,7 +30,7 @@ Plug 'MunifTanjim/nui.nvim'
 ### Installing `hydrovim` :
 For installing with vim plug : 
 ```vim
-Plug 'smzm/hydorvim'
+Plug 'smzm/hydrovim'
 ```
 
 
