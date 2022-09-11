@@ -1,7 +1,5 @@
 let g:FileType = &filetype
 
-
-
 :function HydrovimPython(mode)
 
     " this variable is a flag . if will be 1 hydrovim execute
@@ -280,18 +278,25 @@ EOF
 
 
 
+let g:HydrovimOpened = 0
 :function HydrovimRun(mode)
+    
+    :if (g:HydrovimOpened == 0) 
+        "get the current line
+        :let g:current_line = line(".") 
 
-    "get the current line
-    :let g:current_line = line(".") 
+        :if g:FileType == "python"
+            :call HydrovimPython(a:mode)
+            :call HydrovimExec()
+            let g:HydrovimOpened = 1
+        :endif
 
-    :if g:FileType == "python"
-        :call HydrovimPython(a:mode)
-        :call HydrovimExec()
+        " Clean command prompt after calling hydrovimRun function
+        echo ""
+    :else 
+        q
+        let g:HydrovimOpened = 0
     :endif
-
-    " Clean command prompt after calling hydrovimRun function
-    echo ""
 :endfunction
 
 
@@ -300,10 +305,11 @@ EOF
 function Exit_unmap_q()
   :q 
   unmap <silent> q
+  let g:HydrovimOpened = 0
 endfunction
 
 
 
-nnoremap <silent> <F8> :call HydrovimRun('normal')<cr><cr>   
-inoremap <silent> <F8> <esc>:call HydrovimRun('normal')<cr><cr>
-vnoremap <silent> <F8> :call HydrovimRun('visual')<cr><cr>
+nnoremap <silent> <F8> :call HydrovimRun('normal')<cr> 
+inoremap <silent> <F8> <esc>:call HydrovimRun('normal')<cr>
+vnoremap <silent> <F8> :call HydrovimRun('visual')<cr>
