@@ -1,7 +1,0 @@
-{
-  if ($0 ~ /\(/) {    # Get the result of first file result and if has '(' return nothing
-  }
-  else {
-    print $0          # else return whole line
-  }
-}
