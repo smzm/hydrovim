@@ -5,7 +5,6 @@
 :let g:from_first_until_current = tempname()
 :let g:current_line_clean = tempname()
 :let g:one_before_last_line = tempname()
-:let g:one_before_last_line = tempname()
 :let g:one_before = tempname()
 :let g:one_after = tempname()
 :let g:results_hydrovim_py = tempname()
@@ -62,32 +61,59 @@ let g:HydrovimOpened = 0
 
     " ================= Indent lines ======================    
     :if (l:IsIndent != "")
-        :let l:back = 1
-        :let l:next = 1
-        :let l:IsIndentBack = " "
-        :let l:IsIndentNext = " "
+
+        :let g:NrEndFile=line('$')
+        :let l:back = 0
+        :let l:next = 0
+        :let l:IsIndentInBack = " "
+        :let l:IsIndentInNext = " "
         " Go Back line by line until find nonindent line 
-        while (l:IsIndentBack != "")
-           :silent execute (g:current_line-l:back).."w! "..(g:one_before)..".py"
-           :let l:IsIndentBack = system("awk -e '$0 ~ /^\\s+/ {print $1}' "..(g:one_before)..".py") 
-           let l:back = l:back + 1
+        while (l:IsIndentInBack != "")
+           :if (g:current_line - l:back > 1)
+               :let l:back = l:back + 1
+           :else
+                break
+           :endif
+           :silent execute (g:current_line - l:back).."w! "..(g:one_before)..".py"
+           :let l:IsIndentInBack = system("awk -e '$0 ~ /^\\s+/ {print $1}' "..(g:one_before)..".py") 
         endwhile
-        " Go forward line by line until find nonindent line 
-        while (l:IsIndentNext != "")
-           :silent execute (g:current_line+l:next).."w! "..(g:one_after)..".py"
-           :let l:IsIndentNext = system("awk -e '$0 ~ /^\\s+/ {print $1}' "..(g:one_after)..".py") 
-           let l:next = l:next + 1
+
+        "Go forward line by line until find nonindent line 
+        while (l:IsIndentInNext != "")
+           :if (g:current_line + l:next < g:NrEndFile)
+               :let l:next = l:next + 1
+           :else
+                break
+           :endif
+           :silent execute (g:current_line + l:next).."w! "..(g:one_after)..".py"
+           :let l:IsIndentInNext = system("awk -e '$0 ~ /^\\s+/ {print $1}' "..(g:one_after)..".py") 
         endwhile
 
         " it is a for|while loop or if statement ?
-        :let l:IsFOR = system("awk -e '$0 ~ /^for/ {print $0}' "..(g:one_before)..".py") 
+        :let l:IsFor = system("awk -e '$0 ~ /^for/ {print $0}' "..(g:one_before)..".py") 
         :let l:IsWhile = system("awk -e '$0 ~ /^while/ {print $0}' "..(g:one_before)..".py") 
         :let l:IsIf = system("awk -e '$0 ~ /^if/ {print $0}' "..(g:one_before)..".py") 
-        :if (l:IsFOR != "") || (l:IsWhile != "") || (l:IsIf != "")
+
+        if (g:current_line - l:back <= 1)
+            let g:first_indent_line_NR = 1 
+            let g:end_indent_line_NR = g:current_line + l:next
+            :silent call system("echo '\n' > "..(g:from_first_until_current)..".py")
+
+        elseif (g:current_line + l:next > g:NrEndFile)
+            let g:first_indent_line_NR = g:current_line - l:back
+            let g:end_indent_line_NR = g:NrEndFile
+            :silent execute "1,"..(g:current_line - g:first_indent_line_NR).."w! "..(g:from_first_until_current)..".py"
+        else 
+            let g:first_indent_line_NR = g:current_line - l:back
+            let g:end_indent_line_NR = g:current_line + l:next
+            :silent execute "1,"..(g:current_line - g:first_indent_line_NR).."w! "..(g:from_first_until_current)..".py"
+        endif 
+
+        :if (l:IsFor != "") || (l:IsWhile != "") || (l:IsIf != "")
             let g:HydrovimRunned = 1
-            :silent execute "1,"..(g:current_line - l:back).."w! "..(g:from_first_until_current)..".py"
             :silent call system('echo "print(\"Hydrovim running code to this line.\")" >> '..(g:from_first_until_current)..".py")
-            :silent execute g:current_line - l:back+1","..(g:current_line+l:next - 1).."w >> "..(g:from_first_until_current)..".py"
+            :silent execute g:first_indent_line_NR..","..(g:end_indent_line_NR).."w >> "..(g:from_first_until_current)..".py"
+            ":put= l:next
         :else
              :let g:HydrovimOpened = 0
         endif
