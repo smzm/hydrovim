@@ -106,7 +106,7 @@ let g:HydrovimOpened = 0
         else 
             let g:first_indent_line_NR = g:current_line - l:back
             let g:end_indent_line_NR = g:current_line + l:next
-            :silent execute "1,"..(g:current_line - g:first_indent_line_NR).."w! "..(g:from_first_until_current)..".py"
+            :silent execute "1,"..(g:current_line).."w! "..(g:from_first_until_current)..".py"
         endif 
 
         :if (l:IsFor != "") || (l:IsWhile != "") || (l:IsIf != "")
