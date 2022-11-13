@@ -40,7 +40,7 @@ Plug 'smzm/hydrovim'
 <br>
 
 ## ✅ Usage : 
-- Put the cursor on the desire line of code and press `F8` for running hydrovim from ***first line*** to the ***current line***.
+- Put the cursor on the desire line of code and press `F8` for running hydrovim from ***first line*** of your code to the ***current line*** and show the result of the current line in the Hydrovim pop-up.
 - You can highlight code in visual mode and run hydrovim with `F8`.
 - Use `q` or `F8` key again for close hydrovim pop-up.
 
