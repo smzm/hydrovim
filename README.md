@@ -45,4 +45,12 @@ Plug 'smzm/hydrovim'
 - Use `q` or `F8` key again for close hydrovim pop-up.
 
 
+<br>
+
+## 👾 Troubleshooting : 
+If with pressing `F8` hydrovim popup doesn't appear, First Check prerequisites in your terminal : 
+1. `awk` command should be available.
+2. `python` command should be available. (`python` is the command use in hydrovim not `python3`)
+
+👉 Put `syntax on` in top of your neovim configuration file. (before hydrovim installation)
 
