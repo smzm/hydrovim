@@ -357,8 +357,7 @@ function HydrovimRun(mode)
     "get the current line
     let g:current_line = line(".") 
 
-    let g:FileType = &ft
-    if g:FileType == "python"
+    if &ft == "python"
         let g:HydrovimOpened = 1
         :call HydrovimPython(a:mode)
         :call HydrovimExec()
