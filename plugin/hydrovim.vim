@@ -1,4 +1,8 @@
-:let g:FileType = &filetype
+" Next line have been commented. g:FileType is always vim since it's this is
+" going to be sourced. (I'm not sure if this is a bug or not). Testing it
+" always returns vim so we are doing it dynamically in the Run function at the
+" bottom of this file.
+" :let g:FileType = &filetype
 
 " Create Temporary files address
 :let g:current_line_file = tempname()
@@ -342,36 +346,38 @@ EOF
 
 
 
-:function HydrovimRun(mode)
-    :if (g:HydrovimOpened == 0)
+" ==================================
+" HydrovimOpened should be 0 at the beginning. And since this is kinda entry/main
+" function we set HydrovimOpened to 0 at the end of the function (Toggling
+" should happend just here).
+function HydrovimRun(mode)
+    if (g:HydrovimOpened != 0)
+        echo "Hydrovim is already opened"
+    endif
+    "get the current line
+    let g:current_line = line(".") 
 
-        "get the current line
-        :let g:current_line = line(".") 
-
-        :if g:FileType == "python"
-            let g:HydrovimOpened = 1
-            :call HydrovimPython(a:mode)
-            :call HydrovimExec()
-        :endif
-
-        " Clean command prompt after calling hydrovimRun function
-        echo ""
-    " if hydrovim popup is open just close it. (toggle functionality)
-    :else 
-        q
-        let g:HydrovimOpened = 0
-    :endif
-:endfunction
-
+    let g:FileType = &ft
+    if g:FileType == "python"
+        let g:HydrovimOpened = 1
+        :call HydrovimPython(a:mode)
+        :call HydrovimExec()
+    endif
+    " Clean command prompt after calling hydrovimRun function and toggle HydrovimOpened since it's been executed
+    echo ""
+    let g:HydrovimOpened = 0
+endfunction
 
 
 " mapping q after pop up window show for exit
-function Exit_unmap_q()
+" =============================================
+" Changed it to an if statement to check if the popup is open.
+" The function previously was never called.
+if(g:HydrovimOpened == 1)
   :q 
   unmap <silent> q
   let g:HydrovimOpened = 0
-endfunction
-
+endif
 
 nnoremap <silent> <F8> :call HydrovimRun('normal')<cr> 
 inoremap <silent> <F8> <esc>:call HydrovimRun('normal')<cr>
