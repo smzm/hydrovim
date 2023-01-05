@@ -372,11 +372,11 @@ endfunction
 " =============================================
 " Changed it to an if statement to check if the popup is open.
 " The function previously was never called.
-if(g:HydrovimOpened == 1)
+function Exit_unmap_q()
   :q 
   unmap <silent> q
   let g:HydrovimOpened = 0
-endif
+endfunction
 
 nnoremap <silent> <F8> :call HydrovimRun('normal')<cr> 
 inoremap <silent> <F8> <esc>:call HydrovimRun('normal')<cr>
