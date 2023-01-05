@@ -51,6 +51,7 @@ Plug 'smzm/hydrovim'
 If with pressing `F8` hydrovim popup doesn't appear, First Check prerequisites in your terminal : 
 1. `awk` command should be available.
 2. `python` command should be available. (`python` is the command use in hydrovim not `python3`)
+3. [`MunifTanjim/nui.nvim`](https://github.com/MunifTanjim/nui.nvim) should installed in your neovim.
 
 👉 Put `syntax on` in top of your neovim configuration file. (before hydrovim installation)
 
