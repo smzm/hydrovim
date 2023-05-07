@@ -33,7 +33,10 @@ For installing with vim plug :
 Plug 'smzm/hydrovim'
 ```
 
+<br>
 
+## Issue : 
+This plugin tested only with Vim and Neovim which configured with `.vim` files. Some people can't use Hydrovim when configured Neovim with `Lua`.
 
 
 <br>
